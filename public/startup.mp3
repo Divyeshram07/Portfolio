@@ -1,0 +1,5 @@
+useEffect(() => {
+  const audio = new Audio("/startup.mp3");
+  audio.volume = 0.2;
+  audio.play().catch(() => {});
+}, []);

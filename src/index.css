@@ -1,4 +1,13 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 
 html {
   scroll-behavior: smooth;
@@ -36,4 +45,211 @@ h1, h2, h3 {
 
 .nav-link:hover::after {
   width: 100%;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loadingBar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease forwards;
+}
+
+.animate-loadingBar {
+  animation: loadingBar 2s ease forwards;
+}
+
+@keyframes logoPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+.animate-logoPulse {
+  animation: logoPulse 1.5s ease-in-out infinite;
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+.logo-path {
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  animation: drawCircle 2s ease forwards;
+}
+
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dockBounce {
+  0% { transform: scale(0.8) translateY(40px); opacity: 0; }
+  40% { transform: scale(1.2) translateY(-10px); opacity: 1; }
+  60% { transform: scale(0.95) translateY(5px); }
+  80% { transform: scale(1.05) translateY(-2px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+.animate-dock {
+  animation: dockBounce 1.4s cubic-bezier(.17,.67,.83,.67) forwards;
+}
+/* Slow Gradient Ring Rotation */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spinSlow {
+  animation: spinSlow 8s linear infinite;
+}
+
+/* Floating Effect */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+@keyframes gradientMove {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-gradientMove {
+  animation: gradientMove 10s ease-in-out infinite;
+}
+@keyframes scrollIndicator {
+  0% { transform: translateY(0px); opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
+}
+
+.animate-scrollIndicator {
+  animation: scrollIndicator 1s infinite alternate;
+}
+@keyframes underline {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.animate-underline {
+  animation: underline 0.3s ease forwards;
+}
+@keyframes underline {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.animate-underline {
+  animation: underline 0.3s ease forwards;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@keyframes gradientMove {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-gradientMove {
+  animation: gradientMove 12s ease-in-out infinite;
+}
+
+@keyframes scrollIndicator {
+  0% { transform: translateY(0px); opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
+}
+
+.animate-scrollIndicator {
+  animation: scrollIndicator 1s infinite alternate;
+}
+
+/* SVG Drawing */
+.logo-path {
+  stroke-dasharray: 314;
+  stroke-dashoffset: 314;
+  animation: drawCircle 2s ease forwards;
+}
+
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Floating Effect */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }

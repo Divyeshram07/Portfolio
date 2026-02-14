@@ -14,8 +14,8 @@ export default function Projects() {
     {
       title: "Online Ticket Platform",
       desc: "Full-stack MERN application with authentication.",
-      github: "#",
-      live: "#"
+      github: "https://github.com/Divyeshram07/MERN-PROJECT",
+      live: "https://online-ticket-booking-snowy.vercel.app/"
     }
   ];
 

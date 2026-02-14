@@ -1,122 +1,81 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
-  const [active, setActive] = useState("hero");
-  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const underlineRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const sections = [
-    "hero",
-    "education",
-    "skills",
-    "projects",
-    "coding",
-    "contact",
-  ];
-
-  // Scroll detection (active section + shrink navbar)
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 120;
-
-      // Shrink effect
-      setScrolled(window.scrollY > 50);
-
-      sections.forEach((section) => {
-        const element = document.getElementById(section);
-        if (element) {
-          if (
-            scrollPos >= element.offsetTop &&
-            scrollPos < element.offsetTop + element.offsetHeight
-          ) {
-            setActive(section);
-          }
-        }
-      });
+      setScrolled(window.scrollY > 5);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Move underline smoothly
-  useEffect(() => {
-    const activeLink = document.querySelector(
-      `a[data-section="${active}"]`
-    );
-
-    if (activeLink && underlineRef.current) {
-      underlineRef.current.style.width = `${activeLink.offsetWidth}px`;
-      underlineRef.current.style.left = `${activeLink.offsetLeft}px`;
-    }
-  }, [active]);
+  const links = [
+    { name: "About Me", id: "about" },
+    { name: "Stats", id: "stats" },
+    { name: "Education", id: "education" },
+    { name: "Skills", id: "skills" },
+    { name: "Projects", id: "projects" },
+    { name: "Contact", id: "contact" },
+  ];
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full bg-white z-50 border-b transition-all duration-300 ${
-        scrolled ? "py-3 shadow-sm" : "py-6"
+      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${
+        scrolled
+          ? "bg-white/90 backdrop-blur-md shadow-md"
+          : "bg-white"
       }`}
+      style={{ height: "80px" }}
     >
-      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center relative">
+      <div className="max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
 
-        {/* Logo */}
-        <h1 className="text-lg font-semibold tracking-wide">
+        <h1 className="text-lg font-semibold tracking-wide text-slate-800">
           DIVYESH RAM
         </h1>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-10 text-sm font-medium relative">
-          {sections.map((section) => (
+        {/* Desktop Menu */}
+        <nav className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+          {links.map((link) => (
             <a
-              key={section}
-              href={`#${section}`}
-              data-section={section}
-              className={`transition-colors duration-300 ${
-                active === section
-                  ? "text-black"
-                  : "text-gray-500 hover:text-black"
-              }`}
+              key={link.id}
+              href={`#${link.id}`}
+              className="hover:text-slate-900 transition"
             >
-              {section.charAt(0).toUpperCase() + section.slice(1)}
+              {link.name}
             </a>
           ))}
-
-          {/* Smooth Active Underline */}
-          <span
-            ref={underlineRef}
-            className="absolute -bottom-1 h-[2px] bg-black transition-all duration-300"
-          />
         </nav>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Button */}
         <button
-          className="md:hidden text-xl"
           onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden text-2xl text-slate-700"
         >
           {menuOpen ? "✕" : "☰"}
         </button>
       </div>
 
-      {/* Animated Mobile Menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="px-6 py-4 space-y-4 bg-white border-t text-sm">
-          {sections.map((section) => (
-            <a
-              key={section}
-              href={`#${section}`}
-              className="block text-gray-600 hover:text-black transition"
-              onClick={() => setMenuOpen(false)}
-            >
-              {section.charAt(0).toUpperCase() + section.slice(1)}
-            </a>
-          ))}
+      {/* Mobile Dropdown */}
+      {menuOpen && (
+        <div className="md:hidden bg-white shadow-lg border-t">
+          <div className="flex flex-col px-6 py-4 space-y-4 text-sm text-slate-600">
+            {links.map((link) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={() => setMenuOpen(false)}
+                className="hover:text-slate-900 transition"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }
