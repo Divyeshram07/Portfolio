@@ -8,28 +8,75 @@ import {
     CheckCircle2,
     Terminal,
     MapPin,
+    Building2,
+    User,
+    FileText,
+    AlertCircle,
+    Loader2,
+    Sparkles,
 } from "lucide-react";
+
+/* =====================================================
+   CONTACT CONFIGURATION
+===================================================== */
 
 const WHATSAPP_NUMBER = "918008503893";
 const EMAIL = "bdivyeshram@gmail.com";
+
+/* =====================================================
+   CUSTOM BRAND ICONS
+===================================================== */
+
+const GithubIcon = ({ size = 20, className = "" }) => (
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={className}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.483 0-.237-.009-.866-.014-1.7-2.782.604-3.369-1.341-3.369-1.341-.455-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.004.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.349-1.087.635-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.092.39-1.985 1.029-2.685-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0112 6.756c.85.004 1.705.115 2.504.337 1.909-1.295 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.027 1.593 1.027 2.685 0 3.842-2.339 4.687-4.566 4.935.359.31.678.92.678 1.852 0 1.337-.012 2.416-.012 2.745 0 .268.18.58.688.482A10.004 10.004 0 0022 12c0-5.523-4.477-10-10-10z" />
+    </svg>
+);
+
+const LinkedinIcon = ({ size = 20, className = "" }) => (
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={className}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <path d="M20.447 20.452H16.893v-5.569c0-1.328-.027-3.037-1.849-3.037-1.851 0-2.134 1.445-2.134 2.939v5.667H9.357V9h3.413v1.561h.048c.475-.9 1.637-1.849 3.37-1.849 3.601 0 4.267 2.37 4.267 5.455v6.285zM5.337 7.433a2.065 2.065 0 110-4.13 2.065 2.065 0 010 4.13zM7.119 20.452H3.555V9h3.564v11.452z" />
+    </svg>
+);
+
+/* =====================================================
+   SOCIAL LINKS
+===================================================== */
 
 const socials = [
     {
         name: "GitHub",
         short: "GH",
         url: "https://github.com/Divyeshram07",
+        icon: GithubIcon,
     },
     {
         name: "LinkedIn",
         short: "in",
         url: "https://www.linkedin.com/in/divyeshram28/",
-    },
-    {
-        name: "Instagram",
-        short: "IG",
-        url: "https://www.instagram.com/divyesh._.ram/",
+        icon: LinkedinIcon,
     },
 ];
+
+/* =====================================================
+   CONTACT COMPONENT
+===================================================== */
 
 function Contact() {
     const [form, setForm] = useState({
@@ -44,9 +91,9 @@ function Contact() {
     const [sending, setSending] = useState(false);
     const [error, setError] = useState("");
 
-    // ============================================
-    // HANDLE INPUT CHANGE
-    // ============================================
+    /* =================================================
+       HANDLE INPUT
+    ================================================= */
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -57,9 +104,11 @@ function Contact() {
         }));
     };
 
-    // ============================================
-    // HANDLE FORM SUBMIT
-    // ============================================
+    /* =================================================
+       HANDLE SUBMIT
+
+       REAL BACKEND REQUEST RESTORED
+    ================================================= */
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -69,27 +118,23 @@ function Contact() {
 
         try {
             /*
-             * Local development:
-             *
-             * VITE_API_URL=""
-             *
-             * Request becomes:
-             * /api/contact
-             *
-             * Vite proxies it to:
-             * http://localhost:5000
-             *
-             *
-             * Production:
-             *
-             * VITE_API_URL=https://api.divyeshram.dev
-             *
-             * Request becomes:
-             * https://api.divyeshram.dev/api/contact
-             */
+             LOCAL DEVELOPMENT
 
-            const API_URL =
-                import.meta.env.VITE_API_URL || "";
+             VITE_API_URL=""
+
+             Request:
+             /api/contact
+
+
+             PRODUCTION
+
+             VITE_API_URL=https://your-backend-url.com
+
+             Request:
+             https://your-backend-url.com/api/contact
+            */
+
+            const API_URL = import.meta.env.VITE_API_URL || "";
 
             const response = await fetch(
                 `${API_URL}/api/contact`,
@@ -97,8 +142,7 @@ function Contact() {
                     method: "POST",
 
                     headers: {
-                        "Content-Type":
-                            "application/json",
+                        "Content-Type": "application/json",
                     },
 
                     body: JSON.stringify(form),
@@ -106,25 +150,19 @@ function Contact() {
             );
 
             /*
-             * Read response as text first.
-             *
-             * This prevents:
-             *
-             * Unexpected end of JSON input
-             *
-             * when the server returns an empty response.
-             */
+             Read as text first.
 
-            const responseText =
-                await response.text();
+             Prevents JSON parsing errors if the
+             backend sends an empty response.
+            */
+
+            const responseText = await response.text();
 
             let data = {};
 
             if (responseText) {
                 try {
-                    data = JSON.parse(
-                        responseText
-                    );
+                    data = JSON.parse(responseText);
                 } catch (parseError) {
                     console.error(
                         "Invalid server response:",
@@ -137,20 +175,20 @@ function Contact() {
                 }
             }
 
-            // ----------------------------------------
-            // SERVER ERROR
-            // ----------------------------------------
+            /*
+             BACKEND ERROR
+            */
 
             if (!response.ok) {
                 throw new Error(
                     data.message ||
-                        "Unable to send your message."
+                        "Unable to send your message. Please try again."
                 );
             }
 
-            // ----------------------------------------
-            // SUCCESS
-            // ----------------------------------------
+            /*
+             SUCCESS
+            */
 
             setSubmitted(true);
 
@@ -176,75 +214,82 @@ function Contact() {
         }
     };
 
-    // ============================================
-    // SEND ANOTHER MESSAGE
-    // ============================================
-
     const handleSendAnother = () => {
         setSubmitted(false);
         setError("");
     };
 
-    // ============================================
-    // WHATSAPP MESSAGE
-    // ============================================
+    /* =================================================
+       WHATSAPP
+    ================================================= */
 
-    const whatsappMessage =
-        encodeURIComponent(
-            "Hi Divyesh, I found your portfolio and would like to connect."
-        );
+    const whatsappMessage = encodeURIComponent(
+        "Hi Divyesh, I found your portfolio and would like to connect."
+    );
 
     return (
         <section
             id="contact"
             className="
                 relative
-                py-28
-                md:py-36
-                bg-[#050507]
                 overflow-hidden
                 border-b
                 border-white/[0.07]
+                bg-[#050507]
+                py-28
+                md:py-36
             "
         >
             {/* =========================================
-                BACKGROUND GLOW
+                BACKGROUND
             ========================================= */}
 
             <div
                 className="
-                    absolute
-                    left-1/2
-                    top-[20%]
-                    -translate-x-1/2
-                    w-[500px]
-                    h-[500px]
-                    rounded-full
-                    bg-blue-600/[0.035]
-                    blur-[130px]
                     pointer-events-none
+                    absolute
+                    left-[-250px]
+                    top-[10%]
+                    h-[500px]
+                    w-[500px]
+                    rounded-full
+                    bg-cyan-500/[0.045]
+                    blur-[170px]
                 "
             />
 
             <div
                 className="
-                    absolute
-                    right-[-150px]
-                    bottom-[-150px]
-                    w-[400px]
-                    h-[400px]
-                    rounded-full
-                    bg-violet-600/[0.025]
-                    blur-[120px]
                     pointer-events-none
+                    absolute
+                    bottom-[-180px]
+                    right-[-180px]
+                    h-[550px]
+                    w-[550px]
+                    rounded-full
+                    bg-violet-600/[0.045]
+                    blur-[170px]
                 "
             />
 
-            <div className="relative max-w-7xl mx-auto px-6 md:px-8">
+            {/* GRID */}
 
-                {/* =========================================
+            <div
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    opacity-[0.018]
+                    bg-[linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)]
+                    bg-[size:90px_90px]
+                "
+            />
+
+            <div className="relative mx-auto max-w-7xl px-5 md:px-8">
+
+                {/* =====================================
                     HEADER
-                ========================================= */}
+                ====================================== */}
 
                 <motion.div
                     initial={{
@@ -259,76 +304,137 @@ function Contact() {
                         once: true,
                     }}
                     transition={{
-                        duration: 0.6,
+                        duration: 0.7,
                     }}
-                    className="max-w-3xl"
                 >
                     <div className="flex items-center gap-3">
 
-                        <span className="text-xs font-mono text-white/20">
-                            06
-                        </span>
+                        <div
+                            className="
+                                flex
+                                h-11
+                                w-11
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                border
+                                border-cyan-400/15
+                                bg-cyan-400/[0.06]
+                            "
+                        >
+                            <MessageCircle
+                                size={18}
+                                className="text-cyan-300"
+                            />
+                        </div>
 
-                        <span className="text-sm text-blue-400">
-                            Communication Channel
-                        </span>
+                        <div>
+                            <p
+                                className="
+                                    text-[10px]
+                                    tracking-[0.3em]
+                                    text-cyan-300/70
+                                "
+                            >
+                                06 — CONTACT
+                            </p>
+
+                            <p className="mt-1 text-xs text-white/25">
+                                Let's create something meaningful
+                            </p>
+                        </div>
 
                     </div>
+                </motion.div>
 
+                {/* =====================================
+                    MAIN HEADING
+                ====================================== */}
+
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 30,
+                    }}
+                    whileInView={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    viewport={{
+                        once: true,
+                    }}
+                    transition={{
+                        duration: 0.8,
+                        delay: 0.1,
+                    }}
+                    className="mt-10 max-w-5xl"
+                >
                     <h2
                         className="
-                            mt-5
-                            text-4xl
-                            md:text-6xl
+                            text-5xl
                             font-semibold
-                            tracking-tight
+                            leading-[0.93]
+                            tracking-[-0.055em]
                             text-white
+                            md:text-7xl
+                            lg:text-8xl
                         "
                     >
                         Let's start
-                        <span className="text-white/25">
-                            {" "}a conversation.
+
+                        <span
+                            className="
+                                mt-2
+                                block
+                                bg-gradient-to-r
+                                from-cyan-300
+                                via-blue-400
+                                to-violet-400
+                                bg-clip-text
+                                text-transparent
+                            "
+                        >
+                            a conversation.
                         </span>
                     </h2>
 
                     <p
                         className="
-                            mt-6
+                            mt-8
                             max-w-2xl
-                            text-lg
+                            text-base
                             leading-8
-                            text-white/35
+                            text-white/40
+                            md:text-lg
                         "
                     >
-                        Have an internship opportunity,
-                        project idea, collaboration, or
-                        simply want to connect? Send me
-                        a message.
+                        Have an idea, opportunity, project or collaboration
+                        in mind? Send me a message and let's explore what
+                        we can build together.
                     </p>
                 </motion.div>
 
-
-                {/* =========================================
+                {/* =====================================
                     MAIN GRID
-                ========================================= */}
+                ====================================== */}
 
                 <div
                     className="
                         mt-16
                         grid
-                        lg:grid-cols-[.75fr_1.25fr]
-                        gap-5
+                        gap-6
+                        lg:grid-cols-[0.75fr_1.25fr]
                     "
                 >
 
-                    {/* =====================================
-                        LEFT CONTACT PANEL
-                    ===================================== */}
+                    {/* =================================
+                        LEFT SIDE
+                    ================================== */}
 
                     <motion.div
                         initial={{
                             opacity: 0,
-                            x: -25,
+                            x: -30,
                         }}
                         whileInView={{
                             opacity: 1,
@@ -338,367 +444,286 @@ function Contact() {
                             once: true,
                         }}
                         transition={{
-                            duration: 0.6,
+                            duration: 0.7,
                         }}
-                        className="
-                            rounded-[2rem]
-                            border
-                            border-white/10
-                            bg-white/[0.025]
-                            overflow-hidden
-                        "
+                        className="space-y-5"
                     >
 
-                        {/* Terminal Header */}
+                        {/* STATUS */}
 
                         <div
                             className="
-                                h-12
-                                px-5
-                                flex
-                                items-center
-                                justify-between
-                                border-b
-                                border-white/[0.07]
+                                rounded-[1.8rem]
+                                border
+                                border-white/[0.09]
+                                bg-white/[0.025]
+                                p-7
                             "
                         >
-
-                            <div className="flex gap-2">
-
-                                <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
-
-                                <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
-
-                                <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
-
-                            </div>
-
-                            <span className="text-[10px] font-mono text-white/20">
-                                contact.interface
-                            </span>
-
-                        </div>
-
-
-                        <div className="p-7 md:p-8">
-
-                            {/* Terminal Identity */}
-
                             <div className="flex items-center gap-3">
 
-                                <Terminal
-                                    size={18}
-                                    className="text-blue-400"
-                                />
+                                <span className="relative flex h-3 w-3">
 
-                                <span className="text-sm text-white/50 font-mono">
-                                    communication@divyesh
+                                    <span
+                                        className="
+                                            absolute
+                                            inline-flex
+                                            h-full
+                                            w-full
+                                            animate-ping
+                                            rounded-full
+                                            bg-emerald-400
+                                            opacity-60
+                                        "
+                                    />
+
+                                    <span
+                                        className="
+                                            relative
+                                            inline-flex
+                                            h-3
+                                            w-3
+                                            rounded-full
+                                            bg-emerald-400
+                                        "
+                                    />
+
+                                </span>
+
+                                <span className="text-sm text-emerald-300">
+                                    Available for opportunities
                                 </span>
 
                             </div>
 
-
-                            {/* Availability */}
-
-                            <div
+                            <p
                                 className="
-                                    mt-8
-                                    p-5
-                                    rounded-2xl
-                                    border
-                                    border-emerald-400/10
-                                    bg-emerald-400/[0.035]
+                                    mt-4
+                                    text-sm
+                                    leading-7
+                                    text-white/30
                                 "
                             >
+                                Currently open to internships,
+                                collaborations and interesting
+                                software projects.
+                            </p>
 
-                                <div className="flex items-center gap-3">
+                        </div>
 
-                                    <span className="relative flex h-2.5 w-2.5">
+                        {/* EMAIL */}
 
-                                        <span
-                                            className="
-                                                absolute
-                                                inline-flex
-                                                h-full
-                                                w-full
-                                                rounded-full
-                                                bg-emerald-400
-                                                opacity-60
-                                                animate-ping
-                                            "
-                                        />
-
-                                        <span
-                                            className="
-                                                relative
-                                                inline-flex
-                                                rounded-full
-                                                h-2.5
-                                                w-2.5
-                                                bg-emerald-400
-                                            "
-                                        />
-
-                                    </span>
-
-                                    <span className="text-sm text-emerald-300">
-                                        Available for opportunities
-                                    </span>
-
-                                </div>
-
-                                <p className="mt-3 text-xs leading-6 text-white/30">
-                                    Currently open to internships,
-                                    collaborations and interesting
-                                    engineering projects.
-                                </p>
-
-                            </div>
-
-
-                            {/* Email */}
-
-                            <a
-                                href={`mailto:${EMAIL}`}
-                                className="
-                                    group
-                                    mt-6
-                                    flex
-                                    items-center
-                                    gap-4
-                                    p-4
-                                    rounded-2xl
-                                    border
-                                    border-white/[0.07]
-                                    bg-black/20
-                                    hover:bg-white/[0.04]
-                                    transition
-                                "
-                            >
+                        <a
+                            href={`mailto:${EMAIL}`}
+                            className="
+                                group
+                                block
+                                rounded-[1.8rem]
+                                border
+                                border-white/[0.09]
+                                bg-white/[0.025]
+                                p-7
+                                transition
+                                duration-500
+                                hover:-translate-y-1
+                                hover:border-cyan-400/25
+                            "
+                        >
+                            <div className="flex items-start justify-between">
 
                                 <div
                                     className="
-                                        w-10
-                                        h-10
-                                        rounded-xl
-                                        border
-                                        border-white/10
                                         flex
+                                        h-14
+                                        w-14
                                         items-center
                                         justify-center
+                                        rounded-2xl
+                                        border
+                                        border-cyan-400/15
+                                        bg-cyan-400/[0.06]
                                     "
                                 >
                                     <Mail
-                                        size={17}
-                                        className="text-blue-400"
+                                        size={22}
+                                        className="text-cyan-300"
                                     />
                                 </div>
 
-                                <div className="min-w-0">
-
-                                    <p className="text-xs text-white/25">
-                                        Email
-                                    </p>
-
-                                    <p className="mt-1 text-sm text-white/60 truncate">
-                                        {EMAIL}
-                                    </p>
-
-                                </div>
-
                                 <ArrowUpRight
-                                    size={15}
+                                    size={20}
                                     className="
-                                        ml-auto
                                         text-white/20
-                                        group-hover:text-white
                                         transition
+                                        duration-300
+                                        group-hover:-translate-y-1
+                                        group-hover:translate-x-1
+                                        group-hover:text-cyan-300
                                     "
                                 />
 
-                            </a>
+                            </div>
 
-
-                            {/* WhatsApp */}
-
-                            <a
-                                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <p
                                 className="
-                                    group
-                                    mt-3
-                                    flex
-                                    items-center
-                                    gap-4
-                                    p-4
-                                    rounded-2xl
-                                    border
-                                    border-white/[0.07]
-                                    bg-black/20
-                                    hover:bg-white/[0.04]
-                                    transition
+                                    mt-7
+                                    text-[10px]
+                                    tracking-[0.2em]
+                                    text-cyan-300/60
                                 "
                             >
+                                EMAIL
+                            </p>
 
-                                <div
-                                    className="
-                                        w-10
-                                        h-10
-                                        rounded-xl
-                                        border
-                                        border-white/10
-                                        flex
-                                        items-center
-                                        justify-center
-                                    "
-                                >
-                                    <MessageCircle
-                                        size={17}
-                                        className="text-emerald-400"
-                                    />
-                                </div>
+                            <p
+                                className="
+                                    mt-3
+                                    break-all
+                                    text-base
+                                    text-white/75
+                                    md:text-lg
+                                "
+                            >
+                                {EMAIL}
+                            </p>
 
-                                <div>
+                            <p className="mt-3 text-sm text-white/30">
+                                Click to send me an email directly.
+                            </p>
 
-                                    <p className="text-xs text-white/25">
-                                        WhatsApp
-                                    </p>
+                        </a>
 
-                                    <p className="mt-1 text-sm text-white/60">
-                                        Start a conversation
-                                    </p>
+                        {/* LOCATION */}
 
-                                </div>
-
-                                <ArrowUpRight
-                                    size={15}
-                                    className="
-                                        ml-auto
-                                        text-white/20
-                                        group-hover:text-white
-                                        transition
-                                    "
-                                />
-
-                            </a>
-
-
-                            {/* Location */}
-
+                        <div
+                            className="
+                                rounded-[1.8rem]
+                                border
+                                border-white/[0.09]
+                                bg-white/[0.025]
+                                p-7
+                            "
+                        >
                             <div
                                 className="
-                                    mt-3
                                     flex
+                                    h-14
+                                    w-14
                                     items-center
-                                    gap-4
-                                    p-4
+                                    justify-center
                                     rounded-2xl
                                     border
-                                    border-white/[0.07]
-                                    bg-black/20
+                                    border-violet-400/15
+                                    bg-violet-400/[0.06]
                                 "
                             >
-
-                                <div
-                                    className="
-                                        w-10
-                                        h-10
-                                        rounded-xl
-                                        border
-                                        border-white/10
-                                        flex
-                                        items-center
-                                        justify-center
-                                    "
-                                >
-                                    <MapPin
-                                        size={17}
-                                        className="text-violet-400"
-                                    />
-                                </div>
-
-                                <div>
-
-                                    <p className="text-xs text-white/25">
-                                        Location
-                                    </p>
-
-                                    <p className="mt-1 text-sm text-white/60">
-                                        India
-                                    </p>
-
-                                </div>
-
+                                <MapPin
+                                    size={22}
+                                    className="text-violet-300"
+                                />
                             </div>
 
+                            <p
+                                className="
+                                    mt-7
+                                    text-[10px]
+                                    tracking-[0.2em]
+                                    text-violet-300/60
+                                "
+                            >
+                                LOCATION
+                            </p>
 
-                            {/* Social Links */}
+                            <p className="mt-3 text-lg text-white/75">
+                                India
+                            </p>
 
-                            <div className="mt-8">
+                            <p className="mt-3 text-sm text-white/30">
+                                Open to remote opportunities and
+                                collaborations.
+                            </p>
 
-                                <p className="text-xs font-mono text-white/20">
-                                    ELSEWHERE
-                                </p>
+                        </div>
 
-                                <div className="mt-3 flex gap-2">
+                        {/* SOCIALS */}
 
-                                    {socials.map(
-                                        (social) => (
-                                            <a
-                                                key={
-                                                    social.name
-                                                }
-                                                href={
-                                                    social.url
-                                                }
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                title={
-                                                    social.name
-                                                }
+                        <div className="grid grid-cols-2 gap-4">
+
+                            {socials.map((social) => {
+
+                                const Icon = social.icon;
+
+                                return (
+                                    <motion.a
+                                        key={social.name}
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        whileHover={{
+                                            y: -5,
+                                        }}
+                                        className="
+                                            group
+                                            rounded-[1.5rem]
+                                            border
+                                            border-white/[0.09]
+                                            bg-white/[0.025]
+                                            p-5
+                                            transition
+                                            hover:border-cyan-400/20
+                                        "
+                                    >
+                                        <div className="flex items-center justify-between">
+
+                                            <Icon
+                                                size={21}
                                                 className="
-                                                    w-10
-                                                    h-10
-                                                    rounded-xl
-                                                    border
-                                                    border-white/10
-                                                    bg-white/[0.02]
-                                                    flex
-                                                    items-center
-                                                    justify-center
-                                                    text-[10px]
-                                                    font-bold
-                                                    text-white/40
-                                                    hover:text-white
-                                                    hover:bg-white/[0.06]
+                                                    text-white/60
                                                     transition
+                                                    group-hover:text-cyan-300
                                                 "
-                                            >
-                                                {
-                                                    social.short
-                                                }
-                                            </a>
-                                        )
-                                    )}
+                                            />
 
-                                </div>
+                                            <ArrowUpRight
+                                                size={16}
+                                                className="
+                                                    text-white/20
+                                                    transition
+                                                    group-hover:-translate-y-1
+                                                    group-hover:translate-x-1
+                                                    group-hover:text-cyan-300
+                                                "
+                                            />
 
-                            </div>
+                                        </div>
+
+                                        <p
+                                            className="
+                                                mt-5
+                                                text-sm
+                                                font-medium
+                                                text-white/70
+                                            "
+                                        >
+                                            {social.name}
+                                        </p>
+
+                                    </motion.a>
+                                );
+                            })}
 
                         </div>
 
                     </motion.div>
 
-
-                    {/* =====================================
-                        FORM PANEL
-                    ===================================== */}
+                    {/* =================================
+                        CONTACT FORM
+                    ================================== */}
 
                     <motion.div
                         initial={{
                             opacity: 0,
-                            x: 25,
+                            x: 30,
                         }}
                         whileInView={{
                             opacity: 1,
@@ -708,540 +733,726 @@ function Contact() {
                             once: true,
                         }}
                         transition={{
-                            duration: 0.6,
+                            duration: 0.7,
                         }}
                         className="
+                            relative
+                            overflow-hidden
                             rounded-[2rem]
                             border
-                            border-white/10
+                            border-white/[0.09]
                             bg-white/[0.025]
                             p-7
-                            md:p-9
+                            md:p-10
                         "
                     >
 
-                        <AnimatePresence mode="wait">
+                        {/* FORM GLOW */}
 
-                            {/* =================================
-                                SUCCESS STATE
-                            ================================= */}
+                        <div
+                            className="
+                                pointer-events-none
+                                absolute
+                                right-[-100px]
+                                top-[-100px]
+                                h-[300px]
+                                w-[300px]
+                                rounded-full
+                                bg-cyan-400/[0.04]
+                                blur-[100px]
+                            "
+                        />
 
-                            {submitted ? (
+                        <div className="relative">
 
-                                <motion.div
-                                    key="success"
-                                    initial={{
-                                        opacity: 0,
-                                        scale: 0.96,
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                        scale: 1,
-                                    }}
-                                    exit={{
-                                        opacity: 0,
-                                        scale: 0.96,
-                                    }}
-                                    className="
-                                        min-h-[600px]
-                                        flex
-                                        flex-col
-                                        items-center
-                                        justify-center
-                                        text-center
-                                    "
-                                >
+                            <AnimatePresence mode="wait">
 
-                                    <div
+                                {/* =====================
+                                    SUCCESS
+                                ====================== */}
+
+                                {submitted ? (
+
+                                    <motion.div
+                                        key="success"
+                                        initial={{
+                                            opacity: 0,
+                                            scale: 0.97,
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            scale: 1,
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                        }}
                                         className="
-                                            w-16
-                                            h-16
-                                            rounded-2xl
-                                            border
-                                            border-emerald-400/20
-                                            bg-emerald-400/10
                                             flex
+                                            min-h-[500px]
+                                            flex-col
                                             items-center
                                             justify-center
+                                            text-center
                                         "
                                     >
 
-                                        <CheckCircle2
-                                            size={30}
-                                            className="text-emerald-400"
-                                        />
+                                        <motion.div
+                                            initial={{
+                                                scale: 0,
+                                            }}
+                                            animate={{
+                                                scale: 1,
+                                            }}
+                                            transition={{
+                                                type: "spring",
+                                                stiffness: 180,
+                                            }}
+                                            className="
+                                                flex
+                                                h-20
+                                                w-20
+                                                items-center
+                                                justify-center
+                                                rounded-full
+                                                border
+                                                border-emerald-400/20
+                                                bg-emerald-400/[0.08]
+                                            "
+                                        >
+                                            <CheckCircle2
+                                                size={36}
+                                                className="text-emerald-400"
+                                            />
+                                        </motion.div>
 
-                                    </div>
-
-                                    <p className="mt-7 text-xs font-mono text-emerald-400">
-                                        MESSAGE_SENT
-                                    </p>
-
-                                    <h3
-                                        className="
-                                            mt-3
-                                            text-3xl
-                                            font-semibold
-                                            text-white
-                                        "
-                                    >
-                                        Thanks for reaching out.
-                                    </h3>
-
-                                    <p
-                                        className="
-                                            mt-4
-                                            max-w-md
-                                            text-sm
-                                            leading-7
-                                            text-white/35
-                                        "
-                                    >
-                                        Your message has been
-                                        successfully delivered.
-                                        I'll get back to you as
-                                        soon as possible.
-                                    </p>
-
-                                    <button
-                                        type="button"
-                                        onClick={
-                                            handleSendAnother
-                                        }
-                                        className="
-                                            mt-8
-                                            px-5
-                                            py-3
-                                            rounded-full
-                                            border
-                                            border-white/10
-                                            text-sm
-                                            text-white/60
-                                            hover:text-white
-                                            hover:bg-white/[0.04]
-                                            transition
-                                        "
-                                    >
-                                        Send another message
-                                    </button>
-
-                                </motion.div>
-
-                            ) : (
-
-                                /* =================================
-                                    CONTACT FORM
-                                ================================= */
-
-                                <motion.form
-                                    key="form"
-                                    onSubmit={
-                                        handleSubmit
-                                    }
-                                    initial={{
-                                        opacity: 0,
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                    }}
-                                    exit={{
-                                        opacity: 0,
-                                    }}
-                                    className="space-y-5"
-                                >
-
-                                    {/* Form Header */}
-
-                                    <div className="mb-8">
-
-                                        <p className="text-xs font-mono text-white/20">
-                                            NEW_MESSAGE
+                                        <p
+                                            className="
+                                                mt-8
+                                                text-[10px]
+                                                tracking-[0.25em]
+                                                text-emerald-300/70
+                                            "
+                                        >
+                                            MESSAGE SENT
                                         </p>
 
                                         <h3
                                             className="
-                                                mt-3
-                                                text-2xl
-                                                font-semibold
+                                                mt-4
+                                                text-3xl
+                                                font-medium
                                                 text-white
                                             "
                                         >
-                                            Tell me what you're building.
+                                            Thank you!
                                         </h3>
 
-                                        <p className="mt-2 text-sm text-white/30">
-                                            I'll receive your message
-                                            directly in my inbox.
+                                        <p
+                                            className="
+                                                mt-4
+                                                max-w-md
+                                                text-sm
+                                                leading-7
+                                                text-white/35
+                                            "
+                                        >
+                                            Your message has been sent
+                                            successfully. I'll get back
+                                            to you as soon as possible.
                                         </p>
 
-                                    </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleSendAnother}
+                                            className="
+                                                mt-8
+                                                rounded-xl
+                                                border
+                                                border-white/10
+                                                px-6
+                                                py-3
+                                                text-sm
+                                                text-white/60
+                                                transition
+                                                hover:bg-white/[0.04]
+                                                hover:text-white
+                                            "
+                                        >
+                                            Send another message
+                                        </button>
 
+                                    </motion.div>
 
-                                    {/* Name + Email */}
+                                ) : (
 
-                                    <div className="grid md:grid-cols-2 gap-4">
+                                    /* =====================
+                                        FORM
+                                    ====================== */
 
-                                        <div>
+                                    <motion.form
+                                        key="form"
+                                        onSubmit={handleSubmit}
+                                        initial={{
+                                            opacity: 0,
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                        }}
+                                    >
 
-                                            <label
-                                                htmlFor="name"
-                                                className="
-                                                    block
-                                                    text-xs
-                                                    text-white/35
-                                                    mb-2
-                                                "
-                                            >
-                                                Name
-                                            </label>
+                                        {/* FORM HEADER */}
 
-                                            <input
-                                                id="name"
-                                                name="name"
-                                                type="text"
-                                                required
-                                                autoComplete="name"
-                                                value={
-                                                    form.name
-                                                }
-                                                onChange={
-                                                    handleChange
-                                                }
-                                                placeholder="Your name"
-                                                className="
-                                                    w-full
-                                                    px-4
-                                                    py-3.5
-                                                    rounded-2xl
-                                                    border
-                                                    border-white/10
-                                                    bg-black/20
-                                                    text-white
-                                                    placeholder:text-white/15
-                                                    outline-none
-                                                    focus:border-blue-400/40
-                                                    focus:ring-1
-                                                    focus:ring-blue-400/10
-                                                    transition
-                                                "
-                                            />
+                                        <div className="mb-9">
+
+                                            <div className="flex items-center gap-3">
+
+                                                <div
+                                                    className="
+                                                        flex
+                                                        h-11
+                                                        w-11
+                                                        items-center
+                                                        justify-center
+                                                        rounded-xl
+                                                        border
+                                                        border-white/[0.08]
+                                                        bg-white/[0.025]
+                                                    "
+                                                >
+                                                    <Sparkles
+                                                        size={18}
+                                                        className="text-cyan-300"
+                                                    />
+                                                </div>
+
+                                                <div>
+
+                                                    <p
+                                                        className="
+                                                            text-base
+                                                            text-white/80
+                                                        "
+                                                    >
+                                                        New message
+                                                    </p>
+
+                                                    <p
+                                                        className="
+                                                            mt-1
+                                                            text-xs
+                                                            text-white/25
+                                                        "
+                                                    >
+                                                        Tell me about your idea.
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
 
                                         </div>
 
-
-                                        <div>
-
-                                            <label
-                                                htmlFor="email"
-                                                className="
-                                                    block
-                                                    text-xs
-                                                    text-white/35
-                                                    mb-2
-                                                "
-                                            >
-                                                Email
-                                            </label>
-
-                                            <input
-                                                id="email"
-                                                name="email"
-                                                type="email"
-                                                required
-                                                autoComplete="email"
-                                                value={
-                                                    form.email
-                                                }
-                                                onChange={
-                                                    handleChange
-                                                }
-                                                placeholder="you@example.com"
-                                                className="
-                                                    w-full
-                                                    px-4
-                                                    py-3.5
-                                                    rounded-2xl
-                                                    border
-                                                    border-white/10
-                                                    bg-black/20
-                                                    text-white
-                                                    placeholder:text-white/15
-                                                    outline-none
-                                                    focus:border-blue-400/40
-                                                    focus:ring-1
-                                                    focus:ring-blue-400/10
-                                                    transition
-                                                "
-                                            />
-
-                                        </div>
-
-                                    </div>
-
-
-                                    {/* Company */}
-
-                                    <div>
-
-                                        <label
-                                            htmlFor="company"
-                                            className="
-                                                block
-                                                text-xs
-                                                text-white/35
-                                                mb-2
-                                            "
-                                        >
-                                            Company
-
-                                            <span className="ml-1 text-white/15">
-                                                optional
-                                            </span>
-                                        </label>
-
-                                        <input
-                                            id="company"
-                                            name="company"
-                                            type="text"
-                                            autoComplete="organization"
-                                            value={
-                                                form.company
-                                            }
-                                            onChange={
-                                                handleChange
-                                            }
-                                            placeholder="Company / organization"
-                                            className="
-                                                w-full
-                                                px-4
-                                                py-3.5
-                                                rounded-2xl
-                                                border
-                                                border-white/10
-                                                bg-black/20
-                                                text-white
-                                                placeholder:text-white/15
-                                                outline-none
-                                                focus:border-blue-400/40
-                                                focus:ring-1
-                                                focus:ring-blue-400/10
-                                                transition
-                                            "
-                                        />
-
-                                    </div>
-
-
-                                    {/* Subject */}
-
-                                    <div>
-
-                                        <label
-                                            htmlFor="subject"
-                                            className="
-                                                block
-                                                text-xs
-                                                text-white/35
-                                                mb-2
-                                            "
-                                        >
-                                            Subject
-                                        </label>
-
-                                        <input
-                                            id="subject"
-                                            name="subject"
-                                            type="text"
-                                            required
-                                            value={
-                                                form.subject
-                                            }
-                                            onChange={
-                                                handleChange
-                                            }
-                                            placeholder="Internship, collaboration, project..."
-                                            className="
-                                                w-full
-                                                px-4
-                                                py-3.5
-                                                rounded-2xl
-                                                border
-                                                border-white/10
-                                                bg-black/20
-                                                text-white
-                                                placeholder:text-white/15
-                                                outline-none
-                                                focus:border-blue-400/40
-                                                focus:ring-1
-                                                focus:ring-blue-400/10
-                                                transition
-                                            "
-                                        />
-
-                                    </div>
-
-
-                                    {/* Message */}
-
-                                    <div>
-
-                                        <label
-                                            htmlFor="message"
-                                            className="
-                                                block
-                                                text-xs
-                                                text-white/35
-                                                mb-2
-                                            "
-                                        >
-                                            Message
-                                        </label>
-
-                                        <textarea
-                                            id="message"
-                                            name="message"
-                                            required
-                                            rows={6}
-                                            value={
-                                                form.message
-                                            }
-                                            onChange={
-                                                handleChange
-                                            }
-                                            placeholder="Write your message..."
-                                            className="
-                                                w-full
-                                                px-4
-                                                py-3.5
-                                                rounded-2xl
-                                                border
-                                                border-white/10
-                                                bg-black/20
-                                                text-white
-                                                placeholder:text-white/15
-                                                outline-none
-                                                focus:border-blue-400/40
-                                                focus:ring-1
-                                                focus:ring-blue-400/10
-                                                transition
-                                                resize-none
-                                            "
-                                        />
-
-                                    </div>
-
-
-                                    {/* Error */}
-
-                                    <AnimatePresence>
+                                        {/* ERROR */}
 
                                         {error && (
+
                                             <motion.div
                                                 initial={{
                                                     opacity: 0,
-                                                    y: -5,
+                                                    y: -8,
                                                 }}
                                                 animate={{
                                                     opacity: 1,
                                                     y: 0,
                                                 }}
-                                                exit={{
-                                                    opacity: 0,
-                                                    y: -5,
-                                                }}
                                                 className="
-                                                    px-4
-                                                    py-3
+                                                    mb-6
+                                                    flex
+                                                    items-start
+                                                    gap-3
                                                     rounded-xl
                                                     border
-                                                    border-red-400/10
-                                                    bg-red-400/[0.04]
-                                                    text-sm
-                                                    text-red-400
+                                                    border-red-400/20
+                                                    bg-red-400/[0.06]
+                                                    p-4
                                                 "
                                             >
-                                                {error}
+
+                                                <AlertCircle
+                                                    size={18}
+                                                    className="
+                                                        mt-0.5
+                                                        shrink-0
+                                                        text-red-300
+                                                    "
+                                                />
+
+                                                <p
+                                                    className="
+                                                        text-sm
+                                                        leading-6
+                                                        text-red-200/80
+                                                    "
+                                                >
+                                                    {error}
+                                                </p>
+
                                             </motion.div>
+
                                         )}
 
-                                    </AnimatePresence>
+                                        {/* NAME + EMAIL */}
 
+                                        <div
+                                            className="
+                                                grid
+                                                gap-5
+                                                md:grid-cols-2
+                                            "
+                                        >
 
-                                    {/* =================================
-                                        SUBMIT BUTTON
-                                    ================================= */}
+                                            {/* NAME */}
 
-                                    <button
-                                        type="submit"
-                                        disabled={sending}
-                                        className="
-                                            group
-                                            w-full
-                                            flex
-                                            items-center
-                                            justify-center
-                                            gap-2
-                                            px-6
-                                            py-4
-                                            rounded-2xl
-                                            bg-white
-                                            text-black
-                                            font-medium
-                                            hover:bg-white/90
-                                            disabled:opacity-50
-                                            disabled:cursor-not-allowed
-                                            transition
-                                        "
-                                    >
+                                            <div>
 
-                                        {sending ? (
-                                            <>
-                                                <span
+                                                <label
                                                     className="
-                                                        w-4
-                                                        h-4
-                                                        border-2
-                                                        border-black/20
-                                                        border-t-black
-                                                        rounded-full
-                                                        animate-spin
+                                                        mb-3
+                                                        flex
+                                                        items-center
+                                                        gap-2
+                                                        text-[10px]
+                                                        tracking-[0.18em]
+                                                        text-white/30
                                                     "
-                                                />
+                                                >
+                                                    <User size={12} />
 
-                                                Sending...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Send message
+                                                    YOUR NAME
+                                                </label>
 
-                                                <Send
-                                                    size={16}
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={form.name}
+                                                    onChange={handleChange}
+                                                    placeholder="Your name"
+                                                    required
                                                     className="
-                                                        group-hover:translate-x-1
+                                                        w-full
+                                                        rounded-xl
+                                                        border
+                                                        border-white/[0.09]
+                                                        bg-black/20
+                                                        px-5
+                                                        py-4
+                                                        text-sm
+                                                        text-white
+                                                        outline-none
                                                         transition
+                                                        placeholder:text-white/15
+                                                        focus:border-cyan-400/35
+                                                        focus:bg-white/[0.025]
                                                     "
                                                 />
-                                            </>
-                                        )}
 
-                                    </button>
+                                            </div>
 
+                                            {/* EMAIL */}
 
-                                    <p className="text-center text-[11px] text-white/15">
-                                        Your information is only
-                                        used to respond to your
-                                        message.
-                                    </p>
+                                            <div>
 
-                                </motion.form>
+                                                <label
+                                                    className="
+                                                        mb-3
+                                                        flex
+                                                        items-center
+                                                        gap-2
+                                                        text-[10px]
+                                                        tracking-[0.18em]
+                                                        text-white/30
+                                                    "
+                                                >
+                                                    <Mail size={12} />
 
-                            )}
+                                                    EMAIL
+                                                </label>
 
-                        </AnimatePresence>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    value={form.email}
+                                                    onChange={handleChange}
+                                                    placeholder="you@example.com"
+                                                    required
+                                                    className="
+                                                        w-full
+                                                        rounded-xl
+                                                        border
+                                                        border-white/[0.09]
+                                                        bg-black/20
+                                                        px-5
+                                                        py-4
+                                                        text-sm
+                                                        text-white
+                                                        outline-none
+                                                        transition
+                                                        placeholder:text-white/15
+                                                        focus:border-cyan-400/35
+                                                        focus:bg-white/[0.025]
+                                                    "
+                                                />
+
+                                            </div>
+
+                                        </div>
+
+                                        {/* COMPANY */}
+
+                                        <div className="mt-5">
+
+                                            <label
+                                                className="
+                                                    mb-3
+                                                    flex
+                                                    items-center
+                                                    gap-2
+                                                    text-[10px]
+                                                    tracking-[0.18em]
+                                                    text-white/30
+                                                "
+                                            >
+                                                <Building2 size={12} />
+
+                                                COMPANY
+                                                <span className="text-white/15">
+                                                    OPTIONAL
+                                                </span>
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                name="company"
+                                                value={form.company}
+                                                onChange={handleChange}
+                                                placeholder="Company or organization"
+                                                className="
+                                                    w-full
+                                                    rounded-xl
+                                                    border
+                                                    border-white/[0.09]
+                                                    bg-black/20
+                                                    px-5
+                                                    py-4
+                                                    text-sm
+                                                    text-white
+                                                    outline-none
+                                                    transition
+                                                    placeholder:text-white/15
+                                                    focus:border-cyan-400/35
+                                                    focus:bg-white/[0.025]
+                                                "
+                                            />
+
+                                        </div>
+
+                                        {/* SUBJECT */}
+
+                                        <div className="mt-5">
+
+                                            <label
+                                                className="
+                                                    mb-3
+                                                    flex
+                                                    items-center
+                                                    gap-2
+                                                    text-[10px]
+                                                    tracking-[0.18em]
+                                                    text-white/30
+                                                "
+                                            >
+                                                <FileText size={12} />
+
+                                                SUBJECT
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                name="subject"
+                                                value={form.subject}
+                                                onChange={handleChange}
+                                                placeholder="What would you like to discuss?"
+                                                required
+                                                className="
+                                                    w-full
+                                                    rounded-xl
+                                                    border
+                                                    border-white/[0.09]
+                                                    bg-black/20
+                                                    px-5
+                                                    py-4
+                                                    text-sm
+                                                    text-white
+                                                    outline-none
+                                                    transition
+                                                    placeholder:text-white/15
+                                                    focus:border-cyan-400/35
+                                                    focus:bg-white/[0.025]
+                                                "
+                                            />
+
+                                        </div>
+
+                                        {/* MESSAGE */}
+
+                                        <div className="mt-5">
+
+                                            <label
+                                                className="
+                                                    mb-3
+                                                    flex
+                                                    items-center
+                                                    gap-2
+                                                    text-[10px]
+                                                    tracking-[0.18em]
+                                                    text-white/30
+                                                "
+                                            >
+                                                <Terminal size={12} />
+
+                                                MESSAGE
+                                            </label>
+
+                                            <textarea
+                                                name="message"
+                                                value={form.message}
+                                                onChange={handleChange}
+                                                placeholder="Tell me about your idea, opportunity or project..."
+                                                required
+                                                rows={6}
+                                                className="
+                                                    w-full
+                                                    resize-none
+                                                    rounded-xl
+                                                    border
+                                                    border-white/[0.09]
+                                                    bg-black/20
+                                                    px-5
+                                                    py-4
+                                                    text-sm
+                                                    leading-7
+                                                    text-white
+                                                    outline-none
+                                                    transition
+                                                    placeholder:text-white/15
+                                                    focus:border-cyan-400/35
+                                                    focus:bg-white/[0.025]
+                                                "
+                                            />
+
+                                        </div>
+
+                                        {/* SUBMIT */}
+
+                                        <motion.button
+                                            type="submit"
+                                            disabled={sending}
+                                            whileHover={
+                                                !sending
+                                                    ? {
+                                                        scale: 1.01,
+                                                    }
+                                                    : {}
+                                            }
+                                            whileTap={
+                                                !sending
+                                                    ? {
+                                                        scale: 0.98,
+                                                    }
+                                                    : {}
+                                            }
+                                            className="
+                                                group
+                                                mt-6
+                                                flex
+                                                w-full
+                                                items-center
+                                                justify-center
+                                                gap-3
+                                                rounded-xl
+                                                bg-gradient-to-r
+                                                from-cyan-300
+                                                via-blue-400
+                                                to-violet-400
+                                                px-6
+                                                py-4
+                                                text-sm
+                                                font-medium
+                                                text-[#030305]
+                                                transition
+                                                disabled:cursor-not-allowed
+                                                disabled:opacity-60
+                                            "
+                                        >
+
+                                            {sending ? (
+                                                <>
+                                                    <Loader2
+                                                        size={18}
+                                                        className="animate-spin"
+                                                    />
+
+                                                    Sending message...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Send Message
+
+                                                    <Send
+                                                        size={17}
+                                                        className="
+                                                            transition
+                                                            duration-300
+                                                            group-hover:translate-x-1
+                                                            group-hover:-translate-y-1
+                                                        "
+                                                    />
+                                                </>
+                                            )}
+
+                                        </motion.button>
+
+                                        <p
+                                            className="
+                                                mt-4
+                                                text-center
+                                                text-[10px]
+                                                leading-5
+                                                text-white/20
+                                            "
+                                        >
+                                            Your message will be securely sent
+                                            to {EMAIL}
+                                        </p>
+
+                                    </motion.form>
+
+                                )}
+
+                            </AnimatePresence>
+
+                        </div>
 
                     </motion.div>
 
                 </div>
+
+                {/* =====================================
+                    WHATSAPP QUICK CONTACT
+                ====================================== */}
+
+                <motion.a
+                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    whileInView={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    viewport={{
+                        once: true,
+                    }}
+                    whileHover={{
+                        y: -4,
+                    }}
+                    className="
+                        group
+                        relative
+                        mt-12
+                        flex
+                        items-center
+                        justify-between
+                        overflow-hidden
+                        rounded-[1.7rem]
+                        border
+                        border-white/[0.08]
+                        bg-white/[0.018]
+                        p-6
+                        transition
+                        hover:border-emerald-400/20
+                        md:p-8
+                    "
+                >
+
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            right-[-80px]
+                            top-[-80px]
+                            h-[200px]
+                            w-[200px]
+                            rounded-full
+                            bg-emerald-400/[0.03]
+                            blur-[90px]
+                        "
+                    />
+
+                    <div className="relative flex items-center gap-4">
+
+                        <div
+                            className="
+                                flex
+                                h-14
+                                w-14
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                border
+                                border-emerald-400/15
+                                bg-emerald-400/[0.06]
+                            "
+                        >
+                            <MessageCircle
+                                size={22}
+                                className="text-emerald-300"
+                            />
+                        </div>
+
+                        <div>
+
+                            <p className="text-white/75">
+                                Prefer a quick conversation?
+                            </p>
+
+                            <p className="mt-1 text-sm text-white/30">
+                                Reach out directly on WhatsApp.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <ArrowUpRight
+                        size={20}
+                        className="
+                            relative
+                            text-white/20
+                            transition
+                            group-hover:-translate-y-1
+                            group-hover:translate-x-1
+                            group-hover:text-emerald-300
+                        "
+                    />
+
+                </motion.a>
 
             </div>
         </section>

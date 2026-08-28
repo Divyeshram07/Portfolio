@@ -1,28 +1,168 @@
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useState } from "react";
+import {
+    motion,
+    AnimatePresence,
+    useMotionValue,
+    useSpring,
+    useReducedMotion,
+} from "framer-motion";
+
 import {
     ArrowDown,
     ArrowUpRight,
-    Code2,
+    Download,
     Terminal,
     Sparkles,
+    BrainCircuit,
+    Database,
+    Globe,
+    Cpu,
+    Code2,
+    Activity,
+    Zap,
+    Layers3,
+    CheckCircle2,
 } from "lucide-react";
 
+
+/* ======================================================
+   DATA
+====================================================== */
+
+const roles = [
+    "AI & Software Developer",
+    "Intelligent Systems Builder",
+    "Machine Learning Enthusiast",
+    "Problem Solver",
+];
+
+
+const skills = [
+    "Python",
+    "React",
+    "Machine Learning",
+    "NLP",
+    "RAG",
+    "AI Systems",
+];
+
+
+const terminalLines = [
+    {
+        command: "whoami",
+        output: "divyesh@developer",
+        status: "IDENTITY_RESOLVED",
+    },
+    {
+        command: "focus --current",
+        output: "AI • Machine Learning • Software",
+        status: "SYSTEM_FOCUSED",
+    },
+    {
+        command: "build --status",
+        output: "creating meaningful digital solutions",
+        status: "BUILDING",
+    },
+    {
+        command: "availability",
+        output: "open to new opportunities",
+        status: "AVAILABLE",
+    },
+];
+
+
+const stats = [
+    {
+        icon: Code2,
+        label: "FOCUS",
+        value: "Software",
+    },
+    {
+        icon: BrainCircuit,
+        label: "INTEREST",
+        value: "AI Systems",
+    },
+    {
+        icon: Activity,
+        label: "STATUS",
+        value: "Building",
+    },
+];
+
+
+/* ======================================================
+   HERO COMPONENT
+====================================================== */
+
 function Hero() {
+    const [roleIndex, setRoleIndex] = useState(0);
+    const [terminalIndex, setTerminalIndex] = useState(0);
+
+    const shouldReduceMotion = useReducedMotion();
+
+
+    /* ==================================================
+       MOUSE PARALLAX
+    ================================================== */
+
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
     const smoothX = useSpring(mouseX, {
-        stiffness: 100,
+        stiffness: 45,
         damping: 20,
+        mass: 0.8,
     });
 
     const smoothY = useSpring(mouseY, {
-        stiffness: 100,
+        stiffness: 45,
         damping: 20,
+        mass: 0.8,
     });
 
+
+    /* ==================================================
+       ROLE ROTATION
+    ================================================== */
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRoleIndex((current) => {
+                return (current + 1) % roles.length;
+            });
+        }, 3200);
+
+        return () => clearInterval(interval);
+    }, []);
+
+
+    /* ==================================================
+       TERMINAL ROTATION
+    ================================================== */
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTerminalIndex((current) => {
+                return (
+                    (current + 1) %
+                    terminalLines.length
+                );
+            });
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+
+    /* ==================================================
+       MOUSE MOVEMENT
+    ================================================== */
+
     const handleMouseMove = (event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
+        if (shouldReduceMotion) return;
+
+        const rect =
+            event.currentTarget.getBoundingClientRect();
 
         const x =
             (event.clientX - rect.left) /
@@ -32,124 +172,214 @@ function Hero() {
             (event.clientY - rect.top) /
             rect.height;
 
-        mouseX.set((x - 0.5) * 30);
-        mouseY.set((y - 0.5) * 30);
+        mouseX.set((x - 0.5) * 14);
+        mouseY.set((y - 0.5) * 14);
     };
+
+
+    const handleMouseLeave = () => {
+        mouseX.set(0);
+        mouseY.set(0);
+    };
+
+
+    /* ==================================================
+       SMOOTH SCROLL
+    ================================================== */
+
+    const scrollToSection = (id) => {
+        const section =
+            document.getElementById(id);
+
+        if (!section) return;
+
+        const navbarOffset = 95;
+
+        const position =
+            section.getBoundingClientRect().top +
+            window.scrollY -
+            navbarOffset;
+
+        window.scrollTo({
+            top: Math.max(0, position),
+            behavior: "smooth",
+        });
+    };
+
+
+    const currentTerminal =
+        terminalLines[terminalIndex];
+
+
+    /* ==================================================
+       RENDER
+    ================================================== */
 
     return (
         <section
+            id="home"
             onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             className="
                 relative
-                min-h-screen
+                isolate
                 flex
+                min-h-[100svh]
                 items-center
                 overflow-hidden
-                border-b
-                border-white/[0.07]
+                bg-[#050507]
+                pb-20
+                pt-32
+                md:pt-36
+                lg:pb-16
             "
         >
 
-            {/* ================================= */}
-            {/* Background */}
-            {/* ================================= */}
+            {/* =========================================
+                BACKGROUND
+            ========================================= */}
 
-            <div className="absolute inset-0 pointer-events-none">
+            <div className="pointer-events-none absolute inset-0">
+
+                {/* Radial depth */}
+
+                <div
+                    className="
+                        absolute
+                        inset-0
+                        bg-[radial-gradient(circle_at_15%_30%,rgba(34,211,238,0.10),transparent_28%),radial-gradient(circle_at_85%_25%,rgba(139,92,246,0.10),transparent_30%),radial-gradient(circle_at_50%_100%,rgba(59,130,246,0.07),transparent_45%)]
+                    "
+                />
+
 
                 {/* Grid */}
+
                 <div
                     className="
                         absolute
                         inset-0
                         opacity-[0.035]
+                        bg-[linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)]
+                        bg-[size:72px_72px]
+                        [mask-image:radial-gradient(ellipse_at_center,black,transparent_78%)]
                     "
-                    style={{
-                        backgroundImage:
-                            "linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px)",
-                        backgroundSize: "60px 60px",
-                    }}
                 />
 
-                {/* Gradient Orb */}
-                <motion.div
-                    style={{
-                        x: smoothX,
-                        y: smoothY,
-                    }}
-                    className="
-                        absolute
-                        left-1/2
-                        top-1/3
-                        -translate-x-1/2
-                        -translate-y-1/2
-                        w-[500px]
-                        h-[500px]
-                        rounded-full
-                        bg-blue-600/10
-                        blur-[120px]
-                    "
-                />
+
+                {/* Top line */}
 
                 <div
                     className="
                         absolute
-                        right-[-100px]
-                        top-[15%]
-                        w-[350px]
-                        h-[350px]
-                        rounded-full
-                        bg-violet-600/10
-                        blur-[100px]
-                    "
-                />
-
-                <div
-                    className="
-                        absolute
-                        left-[-150px]
-                        bottom-[5%]
-                        w-[400px]
-                        h-[400px]
-                        rounded-full
-                        bg-cyan-500/5
-                        blur-[120px]
+                        left-0
+                        right-0
+                        top-0
+                        h-px
+                        bg-gradient-to-r
+                        from-transparent
+                        via-cyan-400/25
+                        to-transparent
                     "
                 />
 
             </div>
 
 
-            {/* ================================= */}
-            {/* Main */}
-            {/* ================================= */}
+            {/* =========================================
+                AMBIENT GLOWS
+            ========================================= */}
+
+            {!shouldReduceMotion && (
+                <>
+                    <motion.div
+                        animate={{
+                            x: [0, 45, 0],
+                            y: [0, -35, 0],
+                        }}
+                        transition={{
+                            duration: 15,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                        className="
+                            pointer-events-none
+                            absolute
+                            left-[3%]
+                            top-[15%]
+                            h-[450px]
+                            w-[450px]
+                            rounded-full
+                            bg-cyan-500/[0.055]
+                            blur-[150px]
+                        "
+                    />
+
+                    <motion.div
+                        animate={{
+                            x: [0, -40, 0],
+                            y: [0, 35, 0],
+                        }}
+                        transition={{
+                            duration: 18,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                        className="
+                            pointer-events-none
+                            absolute
+                            right-[2%]
+                            top-[18%]
+                            h-[500px]
+                            w-[500px]
+                            rounded-full
+                            bg-violet-600/[0.055]
+                            blur-[170px]
+                        "
+                    />
+                </>
+            )}
+
+
+            {/* =========================================
+                MAIN CONTAINER
+            ========================================= */}
 
             <div
                 className="
                     relative
                     z-10
-                    max-w-7xl
                     mx-auto
                     w-full
-                    px-6
+                    max-w-7xl
+                    px-5
                     md:px-8
-                    pt-32
-                    pb-20
                 "
             >
 
-                <div className="grid lg:grid-cols-[1.15fr_.85fr] gap-16 items-center">
+                <div
+                    className="
+                        grid
+                        items-center
+                        gap-14
+                        lg:grid-cols-[1.05fr_.95fr]
+                        lg:gap-12
+                    "
+                >
 
-                    {/* ================================= */}
-                    {/* Left */}
-                    {/* ================================= */}
+
+                    {/* =================================
+                        LEFT CONTENT
+                    ================================== */}
 
                     <div>
 
-                        {/* Status */}
+
+                        {/* AVAILABILITY */}
+
                         <motion.div
                             initial={{
                                 opacity: 0,
-                                y: 20,
+                                y: 15,
                             }}
                             animate={{
                                 opacity: 1,
@@ -161,100 +391,208 @@ function Hero() {
                             className="
                                 inline-flex
                                 items-center
-                                gap-2
-                                px-4
-                                py-2
+                                gap-2.5
                                 rounded-full
                                 border
-                                border-white/10
-                                bg-white/[0.03]
-                                text-sm
-                                text-white/60
+                                border-emerald-400/15
+                                bg-emerald-400/[0.045]
+                                px-3.5
+                                py-2
+                                backdrop-blur-xl
                             "
                         >
 
                             <span className="relative flex h-2 w-2">
 
-                                <span
-                                    className="
-                                        absolute
-                                        inline-flex
-                                        h-full
-                                        w-full
-                                        rounded-full
-                                        bg-emerald-400
-                                        opacity-60
-                                        animate-ping
-                                    "
-                                />
+                                {!shouldReduceMotion && (
+                                    <span
+                                        className="
+                                            absolute
+                                            inline-flex
+                                            h-full
+                                            w-full
+                                            animate-ping
+                                            rounded-full
+                                            bg-emerald-400
+                                            opacity-70
+                                        "
+                                    />
+                                )}
 
                                 <span
                                     className="
                                         relative
                                         inline-flex
-                                        rounded-full
                                         h-2
                                         w-2
+                                        rounded-full
                                         bg-emerald-400
+                                        shadow-[0_0_12px_rgba(52,211,153,0.8)]
                                     "
                                 />
 
                             </span>
 
-                            Open to internship opportunities
+
+                            <span
+                                className="
+                                    text-[10px]
+                                    font-medium
+                                    tracking-[0.16em]
+                                    text-emerald-300/80
+                                "
+                            >
+                                OPEN TO OPPORTUNITIES
+                            </span>
 
                         </motion.div>
 
 
-                        {/* Heading */}
+                        {/* NAME */}
 
-                        <motion.h1
+                        <motion.div
                             initial={{
                                 opacity: 0,
-                                y: 30,
+                                y: 20,
                             }}
                             animate={{
                                 opacity: 1,
                                 y: 0,
                             }}
                             transition={{
+                                delay: 0.12,
+                                duration: 0.8,
+                            }}
+                        >
+
+                            <p
+                                className="
+                                    mt-8
+                                    text-xs
+                                    font-medium
+                                    tracking-[0.28em]
+                                    text-white/30
+                                "
+                            >
+                                HELLO, I'M
+                            </p>
+
+
+                            <h1
+                                className="
+                                    mt-4
+                                    text-[clamp(4rem,9vw,8rem)]
+                                    font-semibold
+                                    leading-[0.82]
+                                    tracking-[-0.075em]
+                                    text-white
+                                "
+                            >
+                                DIVYESH
+
+                                <span
+                                    className="
+                                        mt-2
+                                        block
+                                        bg-gradient-to-r
+                                        from-cyan-300
+                                        via-blue-400
+                                        to-violet-400
+                                        bg-clip-text
+                                        text-transparent
+                                    "
+                                >
+                                    RAM
+                                </span>
+
+                            </h1>
+
+                        </motion.div>
+
+
+                        {/* ROLE */}
+
+                        <motion.div
+                            initial={{
+                                opacity: 0,
+                                y: 20,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                y: 0,
+                            }}
+                            transition={{
+                                delay: 0.3,
                                 duration: 0.7,
-                                delay: 0.1,
                             }}
                             className="
-                                mt-8
-                                text-5xl
-                                sm:text-6xl
-                                md:text-7xl
-                                lg:text-[5.5rem]
-                                leading-[0.95]
-                                tracking-[-0.05em]
-                                font-semibold
+                                mt-9
+                                flex
+                                items-center
+                                gap-4
                             "
                         >
 
-                            Building
-
-                            <span
+                            <div
                                 className="
-                                    block
-                                    text-transparent
-                                    bg-clip-text
+                                    h-px
+                                    w-10
                                     bg-gradient-to-r
-                                    from-blue-400
-                                    via-violet-400
-                                    to-cyan-300
+                                    from-cyan-400
+                                    to-transparent
                                 "
-                            >
-                                intelligent
-                            </span>
+                            />
 
-                            digital systems.
+                            <div className="h-8 overflow-hidden">
 
-                        </motion.h1>
+                                <AnimatePresence mode="wait">
+
+                                    <motion.span
+                                        key={roles[roleIndex]}
+                                        initial={{
+                                            opacity: 0,
+                                            y: 20,
+                                            filter: "blur(8px)",
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            y: 0,
+                                            filter: "blur(0px)",
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                            y: -20,
+                                            filter: "blur(8px)",
+                                        }}
+                                        transition={{
+                                            duration: 0.45,
+                                            ease: [
+                                                0.22,
+                                                1,
+                                                0.36,
+                                                1,
+                                            ],
+                                        }}
+                                        className="
+                                            block
+                                            text-xl
+                                            font-medium
+                                            tracking-tight
+                                            text-white/75
+                                            md:text-2xl
+                                        "
+                                    >
+                                        {roles[roleIndex]}
+                                    </motion.span>
+
+                                </AnimatePresence>
+
+                            </div>
+
+                        </motion.div>
 
 
-                        {/* Description */}
+                        {/* DESCRIPTION */}
 
                         <motion.p
                             initial={{
@@ -266,26 +604,100 @@ function Hero() {
                                 y: 0,
                             }}
                             transition={{
-                                duration: 0.6,
-                                delay: 0.25,
+                                delay: 0.42,
+                                duration: 0.7,
                             }}
                             className="
                                 mt-8
-                                max-w-2xl
-                                text-lg
-                                md:text-xl
+                                max-w-xl
+                                text-[15px]
                                 leading-8
-                                text-white/45
+                                text-white/42
+                                md:text-lg
                             "
                         >
-                            I'm Divyesh Ram, a Computer Science
-                            engineering student focused on AI,
-                            NLP, RAG systems, backend engineering,
-                            and modern web applications.
+                            I build intelligent digital experiences by
+                            combining{" "}
+
+                            <span className="text-white/75">
+                                artificial intelligence,
+                                machine learning,
+                            </span>{" "}
+
+                            and modern software development to create
+                            practical systems that solve meaningful
+                            problems.
+
                         </motion.p>
 
 
-                        {/* Buttons */}
+                        {/* SKILLS */}
+
+                        <motion.div
+                            initial={{
+                                opacity: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                            }}
+                            transition={{
+                                delay: 0.58,
+                            }}
+                            className="
+                                mt-8
+                                flex
+                                flex-wrap
+                                gap-2
+                            "
+                        >
+
+                            {skills.map((skill, index) => (
+
+                                <motion.span
+                                    key={skill}
+                                    initial={{
+                                        opacity: 0,
+                                        scale: 0.9,
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        scale: 1,
+                                    }}
+                                    transition={{
+                                        delay:
+                                            0.58 +
+                                            index * 0.06,
+                                    }}
+                                    whileHover={{
+                                        y: -3,
+                                        scale: 1.03,
+                                    }}
+                                    className="
+                                        cursor-default
+                                        rounded-full
+                                        border
+                                        border-white/[0.08]
+                                        bg-white/[0.025]
+                                        px-3.5
+                                        py-1.5
+                                        text-xs
+                                        text-white/45
+                                        transition
+                                        duration-300
+                                        hover:border-cyan-400/30
+                                        hover:bg-cyan-400/[0.055]
+                                        hover:text-cyan-100
+                                    "
+                                >
+                                    {skill}
+                                </motion.span>
+
+                            ))}
+
+                        </motion.div>
+
+
+                        {/* CTA */}
 
                         <motion.div
                             initial={{
@@ -297,368 +709,670 @@ function Hero() {
                                 y: 0,
                             }}
                             transition={{
-                                duration: 0.6,
-                                delay: 0.35,
+                                delay: 0.75,
+                                duration: 0.7,
                             }}
                             className="
                                 mt-10
                                 flex
                                 flex-wrap
-                                gap-3
+                                items-center
+                                gap-4
                             "
                         >
 
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    scrollToSection(
+                                        "projects"
+                                    )
+                                }
+                                className="
+                                    group
+                                    relative
+                                    inline-flex
+                                    items-center
+                                    gap-2.5
+                                    overflow-hidden
+                                    rounded-xl
+                                    bg-white
+                                    px-6
+                                    py-3.5
+                                    text-sm
+                                    font-semibold
+                                    text-black
+                                    transition-all
+                                    duration-300
+                                    hover:-translate-y-1
+                                    hover:shadow-[0_20px_55px_rgba(255,255,255,0.12)]
+                                "
+                            >
+
+                                <span className="relative z-10">
+                                    Explore My Work
+                                </span>
+
+                                <ArrowUpRight
+                                    size={17}
+                                    className="
+                                        relative
+                                        z-10
+                                        transition-transform
+                                        duration-300
+                                        group-hover:translate-x-1
+                                        group-hover:-translate-y-1
+                                    "
+                                />
+
+                                <span
+                                    className="
+                                        absolute
+                                        inset-0
+                                        translate-y-full
+                                        bg-gradient-to-r
+                                        from-cyan-100
+                                        via-blue-100
+                                        to-violet-100
+                                        transition-transform
+                                        duration-500
+                                        group-hover:translate-y-0
+                                    "
+                                />
+
+                            </button>
+
+
                             <a
-                                href="#projects"
+                                href="/Divyesh_Ram_Resume.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="
                                     group
                                     inline-flex
                                     items-center
                                     gap-2
-                                    px-6
+                                    rounded-xl
+                                    border
+                                    border-white/[0.10]
+                                    bg-white/[0.025]
+                                    px-5
                                     py-3.5
-                                    rounded-full
-                                    bg-white
-                                    text-black
-                                    font-medium
-                                    hover:bg-white/90
-                                    transition
+                                    text-sm
+                                    text-white/55
+                                    transition-all
+                                    duration-300
+                                    hover:-translate-y-1
+                                    hover:border-white/[0.20]
+                                    hover:bg-white/[0.055]
+                                    hover:text-white
                                 "
                             >
-                                Explore my work
 
-                                <ArrowUpRight
-                                    size={17}
+                                <Download
+                                    size={16}
                                     className="
-                                        group-hover:translate-x-1
-                                        group-hover:-translate-y-1
-                                        transition
+                                        transition-transform
+                                        duration-300
+                                        group-hover:translate-y-0.5
                                     "
                                 />
 
-                            </a>
+                                View Resume
 
-
-                            <a
-                                href="#contact"
-                                className="
-                                    inline-flex
-                                    items-center
-                                    gap-2
-                                    px-6
-                                    py-3.5
-                                    rounded-full
-                                    border
-                                    border-white/10
-                                    bg-white/[0.03]
-                                    text-white
-                                    hover:bg-white/[0.07]
-                                    transition
-                                "
-                            >
-                                Let's connect
                             </a>
 
                         </motion.div>
 
-
-                        {/* Scroll */}
-
-                        <motion.a
-                            href="#about"
-                            initial={{
-                                opacity: 0,
-                            }}
-                            animate={{
-                                opacity: 1,
-                            }}
-                            transition={{
-                                delay: 1,
-                            }}
-                            className="
-                                mt-20
-                                inline-flex
-                                items-center
-                                gap-3
-                                text-sm
-                                text-white/30
-                                hover:text-white/70
-                                transition
-                            "
-                        >
-
-                            <span>Scroll to explore</span>
-
-                            <ArrowDown
-                                size={15}
-                                className="animate-bounce"
-                            />
-
-                        </motion.a>
-
                     </div>
 
 
-                    {/* ================================= */}
-                    {/* Interactive System Card */}
-                    {/* ================================= */}
+                    {/* =================================
+                        RIGHT AI EXPERIENCE
+                    ================================== */}
 
                     <motion.div
                         initial={{
                             opacity: 0,
-                            x: 40,
+                            scale: 0.96,
+                            y: 35,
                         }}
                         animate={{
                             opacity: 1,
-                            x: 0,
+                            scale: 1,
+                            y: 0,
                         }}
                         transition={{
-                            duration: 0.8,
                             delay: 0.25,
+                            duration: 1,
+                            ease: [0.22, 1, 0.36, 1],
                         }}
                         style={{
                             x: smoothX,
                             y: smoothY,
                         }}
-                        className="relative"
+                        className="
+                            relative
+                            mx-auto
+                            w-full
+                            max-w-[540px]
+                        "
                     >
+
+
+                        {/* =================================
+                            AI VISUAL CARD
+                        ================================== */}
 
                         <div
                             className="
                                 relative
-                                rounded-[2rem]
-                                border
-                                border-white/10
-                                bg-white/[0.035]
-                                backdrop-blur-xl
+                                aspect-square
                                 overflow-hidden
+                                rounded-[2.5rem]
+                                border
+                                border-white/[0.09]
+                                bg-gradient-to-br
+                                from-white/[0.055]
+                                via-white/[0.025]
+                                to-transparent
+                                shadow-[0_40px_120px_rgba(0,0,0,0.55)]
+                                backdrop-blur-xl
                             "
                         >
 
-                            {/* Top bar */}
+                            {/* Center glow */}
 
                             <div
                                 className="
-                                    h-12
+                                    absolute
+                                    left-1/2
+                                    top-[43%]
+                                    h-[55%]
+                                    w-[55%]
+                                    -translate-x-1/2
+                                    -translate-y-1/2
+                                    rounded-full
+                                    bg-cyan-500/[0.09]
+                                    blur-[100px]
+                                "
+                            />
+
+
+                            {/* Header */}
+
+                            <div
+                                className="
+                                    absolute
+                                    left-6
+                                    right-6
+                                    top-6
+                                    z-20
                                     flex
                                     items-center
                                     justify-between
-                                    px-5
-                                    border-b
-                                    border-white/[0.07]
                                 "
                             >
 
-                                <div className="flex gap-2">
+                                <div
+                                    className="
+                                        flex
+                                        items-center
+                                        gap-2
+                                        rounded-full
+                                        border
+                                        border-white/[0.08]
+                                        bg-black/25
+                                        px-3
+                                        py-1.5
+                                        backdrop-blur-xl
+                                    "
+                                >
 
-                                    <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-
-                                    <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-
-                                    <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-
-                                </div>
-
-                                <span className="text-xs text-white/20">
-                                    system.interface
-                                </span>
-
-                            </div>
-
-
-                            {/* Terminal */}
-
-                            <div className="p-6 md:p-8">
-
-                                <div className="flex items-center gap-3">
-
-                                    <Terminal
-                                        size={17}
-                                        className="text-blue-400"
+                                    <Zap
+                                        size={13}
+                                        className="text-yellow-300"
                                     />
 
-                                    <span className="text-sm text-white/50">
-                                        developer@portfolio
+                                    <span
+                                        className="
+                                            text-[9px]
+                                            font-medium
+                                            tracking-[0.16em]
+                                            text-white/45
+                                        "
+                                    >
+                                        SYSTEM ACTIVE
                                     </span>
 
                                 </div>
 
 
-                                <div className="mt-8 space-y-5 font-mono text-sm">
-
-                                    <div>
-
-                                        <span className="text-emerald-400">
-                                            $
-                                        </span>
-
-                                        <span className="ml-2 text-white/70">
-                                            whoami
-                                        </span>
-
-                                        <p className="mt-2 text-white/35">
-                                            divyesh@ai-engineer
-                                        </p>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <span className="text-emerald-400">
-                                            $
-                                        </span>
-
-                                        <span className="ml-2 text-white/70">
-                                            stack --current
-                                        </span>
-
-                                        <div className="mt-3 flex flex-wrap gap-2">
-
-                                            {[
-                                                "Python",
-                                                "Java",
-                                                "React",
-                                                "NLP",
-                                                "RAG",
-                                                "ML",
-                                            ].map((item) => (
-
-                                                <span
-                                                    key={item}
-                                                    className="
-                                                        px-2.5
-                                                        py-1.5
-                                                        rounded-lg
-                                                        bg-white/[0.05]
-                                                        border
-                                                        border-white/[0.07]
-                                                        text-xs
-                                                        text-white/50
-                                                    "
-                                                >
-                                                    {item}
-                                                </span>
-
-                                            ))}
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <span className="text-emerald-400">
-                                            $
-                                        </span>
-
-                                        <span className="ml-2 text-white/70">
-                                            status
-                                        </span>
-
-                                        <div className="mt-3 flex items-center gap-2">
-
-                                            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-
-                                            <span className="text-emerald-400">
-                                                available
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-                                {/* Bottom Stats */}
-
-                                <div
+                                <span
                                     className="
-                                        mt-10
-                                        grid
-                                        grid-cols-3
-                                        gap-3
+                                        font-mono
+                                        text-[10px]
+                                        text-white/25
+                                    "
+                                >
+                                    AI_01
+                                </span>
+
+                            </div>
+
+
+                            {/* OUTER ORBIT */}
+
+                            {!shouldReduceMotion && (
+                                <motion.div
+                                    animate={{
+                                        rotate: 360,
+                                    }}
+                                    transition={{
+                                        duration: 32,
+                                        repeat: Infinity,
+                                        ease: "linear",
+                                    }}
+                                    className="
+                                        absolute
+                                        left-1/2
+                                        top-[42%]
+                                        h-[72%]
+                                        w-[72%]
+                                        -translate-x-1/2
+                                        -translate-y-1/2
+                                        rounded-full
+                                        border
+                                        border-dashed
+                                        border-cyan-400/[0.15]
                                     "
                                 >
 
                                     <div
                                         className="
-                                            rounded-2xl
-                                            border
-                                            border-white/[0.07]
-                                            bg-white/[0.025]
-                                            p-4
+                                            absolute
+                                            -top-2
+                                            left-1/2
+                                            h-4
+                                            w-4
+                                            -translate-x-1/2
+                                            rounded-full
+                                            bg-cyan-300
+                                            shadow-[0_0_22px_rgba(34,211,238,0.8)]
                                         "
-                                    >
+                                    />
 
-                                        <Code2
-                                            size={16}
-                                            className="text-blue-400"
-                                        />
+                                </motion.div>
+                            )}
 
-                                        <p className="mt-3 text-xs text-white/30">
-                                            Focus
-                                        </p>
 
-                                        <p className="mt-1 text-sm text-white/70">
-                                            AI
+                            {/* INNER ORBIT */}
+
+                            {!shouldReduceMotion && (
+                                <motion.div
+                                    animate={{
+                                        rotate: -360,
+                                    }}
+                                    transition={{
+                                        duration: 22,
+                                        repeat: Infinity,
+                                        ease: "linear",
+                                    }}
+                                    className="
+                                        absolute
+                                        left-1/2
+                                        top-[42%]
+                                        h-[53%]
+                                        w-[53%]
+                                        -translate-x-1/2
+                                        -translate-y-1/2
+                                        rounded-full
+                                        border
+                                        border-violet-400/[0.17]
+                                    "
+                                >
+
+                                    <div
+                                        className="
+                                            absolute
+                                            bottom-[-6px]
+                                            left-1/2
+                                            h-3
+                                            w-3
+                                            -translate-x-1/2
+                                            rounded-full
+                                            bg-violet-300
+                                            shadow-[0_0_20px_rgba(167,139,250,0.8)]
+                                        "
+                                    />
+
+                                </motion.div>
+                            )}
+
+
+                            {/* AI CORE */}
+
+                            <motion.div
+                                animate={
+                                    shouldReduceMotion
+                                        ? {}
+                                        : {
+                                            scale: [
+                                                1,
+                                                1.07,
+                                                1,
+                                            ],
+                                        }
+                                }
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                                className="
+                                    absolute
+                                    left-1/2
+                                    top-[42%]
+                                    z-10
+                                    flex
+                                    h-32
+                                    w-32
+                                    -translate-x-1/2
+                                    -translate-y-1/2
+                                    items-center
+                                    justify-center
+                                    rounded-[2.3rem]
+                                    border
+                                    border-cyan-300/20
+                                    bg-gradient-to-br
+                                    from-cyan-400/15
+                                    via-blue-500/10
+                                    to-violet-500/15
+                                    shadow-[0_0_90px_rgba(59,130,246,0.18)]
+                                    backdrop-blur-xl
+                                "
+                            >
+
+                                <BrainCircuit
+                                    size={50}
+                                    className="text-cyan-200"
+                                />
+
+                            </motion.div>
+
+
+                            {/* FLOATING NODE 1 */}
+
+                            <motion.div
+                                animate={
+                                    shouldReduceMotion
+                                        ? {}
+                                        : {
+                                            y: [0, -9, 0],
+                                        }
+                                }
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                                className="
+                                    absolute
+                                    left-[12%]
+                                    top-[17%]
+                                    z-10
+                                    flex
+                                    h-14
+                                    w-14
+                                    items-center
+                                    justify-center
+                                    rounded-2xl
+                                    border
+                                    border-white/[0.08]
+                                    bg-[#0b0b10]/80
+                                    text-cyan-300
+                                    shadow-xl
+                                    backdrop-blur-xl
+                                "
+                            >
+                                <Code2 size={22} />
+                            </motion.div>
+
+
+                            {/* FLOATING NODE 2 */}
+
+                            <motion.div
+                                animate={
+                                    shouldReduceMotion
+                                        ? {}
+                                        : {
+                                            y: [0, 11, 0],
+                                        }
+                                }
+                                transition={{
+                                    duration: 5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                                className="
+                                    absolute
+                                    right-[12%]
+                                    top-[22%]
+                                    z-10
+                                    flex
+                                    h-14
+                                    w-14
+                                    items-center
+                                    justify-center
+                                    rounded-2xl
+                                    border
+                                    border-white/[0.08]
+                                    bg-[#0b0b10]/80
+                                    text-violet-300
+                                    shadow-xl
+                                    backdrop-blur-xl
+                                "
+                            >
+                                <Database size={22} />
+                            </motion.div>
+
+
+                            {/* FLOATING NODE 3 */}
+
+                            <motion.div
+                                animate={
+                                    shouldReduceMotion
+                                        ? {}
+                                        : {
+                                            y: [0, -8, 0],
+                                        }
+                                }
+                                transition={{
+                                    duration: 4.5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                                className="
+                                    absolute
+                                    bottom-[25%]
+                                    left-[16%]
+                                    z-10
+                                    flex
+                                    h-14
+                                    w-14
+                                    items-center
+                                    justify-center
+                                    rounded-2xl
+                                    border
+                                    border-white/[0.08]
+                                    bg-[#0b0b10]/80
+                                    text-blue-300
+                                    shadow-xl
+                                    backdrop-blur-xl
+                                "
+                            >
+                                <Globe size={22} />
+                            </motion.div>
+
+
+                            {/* FLOATING NODE 4 */}
+
+                            <motion.div
+                                animate={
+                                    shouldReduceMotion
+                                        ? {}
+                                        : {
+                                            y: [0, 9, 0],
+                                        }
+                                }
+                                transition={{
+                                    duration: 5.5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                                className="
+                                    absolute
+                                    bottom-[25%]
+                                    right-[16%]
+                                    z-10
+                                    flex
+                                    h-14
+                                    w-14
+                                    items-center
+                                    justify-center
+                                    rounded-2xl
+                                    border
+                                    border-white/[0.08]
+                                    bg-[#0b0b10]/80
+                                    text-emerald-300
+                                    shadow-xl
+                                    backdrop-blur-xl
+                                "
+                            >
+                                <Cpu size={22} />
+                            </motion.div>
+
+
+                            {/* =================================
+                                CURRENT MISSION
+                                CLEARLY VISIBLE
+                            ================================== */}
+
+                            <div
+                                className="
+                                    absolute
+                                    bottom-6
+                                    left-6
+                                    right-6
+                                    z-30
+                                    rounded-2xl
+                                    border
+                                    border-cyan-400/[0.16]
+                                    bg-[#090a10]/95
+                                    px-5
+                                    py-4
+                                    shadow-[0_15px_50px_rgba(0,0,0,0.5)]
+                                    backdrop-blur-2xl
+                                "
+                            >
+
+                                <div
+                                    className="
+                                        flex
+                                        items-center
+                                        justify-between
+                                        gap-4
+                                    "
+                                >
+
+                                    <div className="min-w-0">
+
+                                        <div
+                                            className="
+                                                flex
+                                                items-center
+                                                gap-2
+                                            "
+                                        >
+
+                                            <Layers3
+                                                size={13}
+                                                className="text-cyan-300/70"
+                                            />
+
+                                            <p
+                                                className="
+                                                    text-[9px]
+                                                    font-semibold
+                                                    tracking-[0.22em]
+                                                    text-cyan-300/65
+                                                "
+                                            >
+                                                CURRENT MISSION
+                                            </p>
+
+                                        </div>
+
+
+                                        <p
+                                            className="
+                                                mt-2
+                                                text-sm
+                                                font-semibold
+                                                tracking-tight
+                                                text-white/90
+                                                md:text-base
+                                            "
+                                        >
+                                            Build. Learn. Improve.
                                         </p>
 
                                     </div>
 
 
-                                    <div
+                                    <motion.div
+                                        animate={
+                                            shouldReduceMotion
+                                                ? {}
+                                                : {
+                                                    rotate: [
+                                                        0,
+                                                        8,
+                                                        -8,
+                                                        0,
+                                                    ],
+                                                    scale: [
+                                                        1,
+                                                        1.06,
+                                                        1,
+                                                    ],
+                                                }
+                                        }
+                                        transition={{
+                                            duration: 4,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                        }}
                                         className="
-                                            rounded-2xl
+                                            flex
+                                            h-10
+                                            w-10
+                                            shrink-0
+                                            items-center
+                                            justify-center
+                                            rounded-xl
                                             border
-                                            border-white/[0.07]
-                                            bg-white/[0.025]
-                                            p-4
+                                            border-cyan-400/15
+                                            bg-cyan-400/[0.07]
                                         "
                                     >
 
                                         <Sparkles
-                                            size={16}
-                                            className="text-violet-400"
+                                            size={18}
+                                            className="text-cyan-300"
                                         />
 
-                                        <p className="mt-3 text-xs text-white/30">
-                                            Building
-                                        </p>
-
-                                        <p className="mt-1 text-sm text-white/70">
-                                            RAG
-                                        </p>
-
-                                    </div>
-
-
-                                    <div
-                                        className="
-                                            rounded-2xl
-                                            border
-                                            border-white/[0.07]
-                                            bg-white/[0.025]
-                                            p-4
-                                        "
-                                    >
-
-                                        <Terminal
-                                            size={16}
-                                            className="text-cyan-400"
-                                        />
-
-                                        <p className="mt-3 text-xs text-white/30">
-                                            Mode
-                                        </p>
-
-                                        <p className="mt-1 text-sm text-white/70">
-                                            Build
-                                        </p>
-
-                                    </div>
+                                    </motion.div>
 
                                 </div>
 
@@ -667,46 +1381,413 @@ function Hero() {
                         </div>
 
 
-                        {/* Floating badge */}
+                        {/* =================================
+                            LIVE TERMINAL
+
+                            IMPORTANT:
+                            No negative margin.
+                            It will NOT cover Current Mission.
+                        ================================== */}
 
                         <motion.div
+                            initial={{
+                                opacity: 0,
+                                y: 25,
+                            }}
                             animate={{
-                                y: [0, -8, 0],
+                                opacity: 1,
+                                y: 0,
                             }}
                             transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: "easeInOut",
+                                delay: 0.85,
+                                duration: 0.8,
                             }}
                             className="
-                                absolute
-                                -right-4
-                                -top-5
-                                px-4
-                                py-2
-                                rounded-full
+                                relative
+                                z-20
+                                mx-auto
+                                mt-5
+                                w-[92%]
+                                overflow-hidden
+                                rounded-2xl
                                 border
-                                border-white/10
-                                bg-[#101014]
-                                text-xs
-                                text-white/50
-                                shadow-2xl
+                                border-white/[0.10]
+                                bg-[#08080d]/95
+                                shadow-[0_25px_80px_rgba(0,0,0,0.6)]
+                                backdrop-blur-2xl
                             "
                         >
-                            <span className="text-blue-400">
-                                ●
-                            </span>{" "}
-                            AI / Software
+
+                            {/* Terminal header */}
+
+                            <div
+                                className="
+                                    flex
+                                    items-center
+                                    gap-2
+                                    border-b
+                                    border-white/[0.07]
+                                    px-4
+                                    py-3
+                                "
+                            >
+
+                                <span className="h-2 w-2 rounded-full bg-red-400/70" />
+
+                                <span className="h-2 w-2 rounded-full bg-yellow-400/70" />
+
+                                <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
+
+
+                                <div
+                                    className="
+                                        ml-auto
+                                        flex
+                                        items-center
+                                        gap-2
+                                        text-[9px]
+                                        tracking-[0.16em]
+                                        text-white/30
+                                    "
+                                >
+
+                                    <Terminal size={12} />
+
+                                    LIVE_TERMINAL
+
+                                </div>
+
+                            </div>
+
+
+                            {/* Terminal body */}
+
+                            <div
+                                className="
+                                    min-h-[125px]
+                                    p-5
+                                    font-mono
+                                "
+                            >
+
+                                <AnimatePresence mode="wait">
+
+                                    <motion.div
+                                        key={terminalIndex}
+                                        initial={{
+                                            opacity: 0,
+                                            y: 12,
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            y: 0,
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                            y: -12,
+                                        }}
+                                        transition={{
+                                            duration: 0.35,
+                                        }}
+                                    >
+
+                                        <p
+                                            className="
+                                                text-xs
+                                                text-cyan-300/80
+                                            "
+                                        >
+
+                                            <span
+                                                className="
+                                                    text-violet-300
+                                                "
+                                            >
+                                                $
+                                            </span>{" "}
+
+                                            {currentTerminal.command}
+
+                                        </p>
+
+
+                                        <p
+                                            className="
+                                                mt-3
+                                                text-sm
+                                                leading-6
+                                                text-white/65
+                                            "
+                                        >
+                                            {currentTerminal.output}
+                                        </p>
+
+
+                                        <div
+                                            className="
+                                                mt-5
+                                                flex
+                                                items-center
+                                                gap-2
+                                            "
+                                        >
+
+                                            <span
+                                                className="
+                                                    relative
+                                                    flex
+                                                    h-2
+                                                    w-2
+                                                "
+                                            >
+
+                                                {!shouldReduceMotion && (
+                                                    <span
+                                                        className="
+                                                            absolute
+                                                            inline-flex
+                                                            h-full
+                                                            w-full
+                                                            animate-ping
+                                                            rounded-full
+                                                            bg-emerald-400
+                                                            opacity-60
+                                                        "
+                                                    />
+                                                )}
+
+                                                <span
+                                                    className="
+                                                        relative
+                                                        inline-flex
+                                                        h-2
+                                                        w-2
+                                                        rounded-full
+                                                        bg-emerald-400
+                                                    "
+                                                />
+
+                                            </span>
+
+
+                                            <span
+                                                className="
+                                                    text-[9px]
+                                                    tracking-[0.16em]
+                                                    text-emerald-300/55
+                                                "
+                                            >
+                                                {
+                                                    currentTerminal.status
+                                                }
+                                            </span>
+
+                                        </div>
+
+                                    </motion.div>
+
+                                </AnimatePresence>
+
+                            </div>
+
                         </motion.div>
+
+
+                        {/* =================================
+                            MINI STATUS CARDS
+                        ================================== */}
+
+                        <div
+                            className="
+                                mt-5
+                                grid
+                                grid-cols-3
+                                gap-2
+                            "
+                        >
+
+                            {stats.map((stat, index) => {
+
+                                const Icon = stat.icon;
+
+                                return (
+
+                                    <motion.div
+                                        key={stat.label}
+                                        initial={{
+                                            opacity: 0,
+                                            y: 15,
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            y: 0,
+                                        }}
+                                        transition={{
+                                            delay:
+                                                1 +
+                                                index * 0.1,
+                                        }}
+                                        whileHover={{
+                                            y: -4,
+                                        }}
+                                        className="
+                                            rounded-xl
+                                            border
+                                            border-white/[0.07]
+                                            bg-white/[0.025]
+                                            p-3
+                                            backdrop-blur-xl
+                                            transition
+                                            hover:border-cyan-400/[0.16]
+                                            hover:bg-cyan-400/[0.025]
+                                        "
+                                    >
+
+                                        <Icon
+                                            size={14}
+                                            className="
+                                                text-cyan-300/75
+                                            "
+                                        />
+
+                                        <p
+                                            className="
+                                                mt-3
+                                                text-[8px]
+                                                tracking-[0.14em]
+                                                text-white/25
+                                            "
+                                        >
+                                            {stat.label}
+                                        </p>
+
+                                        <p
+                                            className="
+                                                mt-1
+                                                truncate
+                                                text-xs
+                                                text-white/65
+                                            "
+                                        >
+                                            {stat.value}
+                                        </p>
+
+                                    </motion.div>
+
+                                );
+                            })}
+
+                        </div>
 
                     </motion.div>
 
                 </div>
 
+
+                {/* =========================================
+                    SCROLL INDICATOR
+                ========================================= */}
+
+                <motion.button
+                    type="button"
+                    onClick={() =>
+                        scrollToSection("about")
+                    }
+                    initial={{
+                        opacity: 0,
+                    }}
+                    animate={{
+                        opacity: 1,
+                    }}
+                    transition={{
+                        delay: 1.2,
+                    }}
+                    className="
+                        group
+                        mx-auto
+                        mt-14
+                        flex
+                        flex-col
+                        items-center
+                        gap-3
+                        text-white/25
+                        transition
+                        hover:text-white/65
+                        lg:mt-10
+                    "
+                >
+
+                    <span
+                        className="
+                            text-[9px]
+                            font-medium
+                            tracking-[0.25em]
+                        "
+                    >
+                        SCROLL TO EXPLORE
+                    </span>
+
+
+                    <motion.span
+                        animate={
+                            shouldReduceMotion
+                                ? {}
+                                : {
+                                    y: [0, 7, 0],
+                                }
+                        }
+                        transition={{
+                            duration: 1.8,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                        className="
+                            flex
+                            h-10
+                            w-10
+                            items-center
+                            justify-center
+                            rounded-full
+                            border
+                            border-white/[0.08]
+                            bg-white/[0.025]
+                            transition
+                            duration-300
+                            group-hover:border-cyan-400/30
+                            group-hover:bg-cyan-400/[0.06]
+                        "
+                    >
+
+                        <ArrowDown size={16} />
+
+                    </motion.span>
+
+                </motion.button>
+
             </div>
+
+
+            {/* =========================================
+                BOTTOM FADE
+            ========================================= */}
+
+            <div
+                className="
+                    pointer-events-none
+                    absolute
+                    bottom-0
+                    left-0
+                    right-0
+                    h-32
+                    bg-gradient-to-t
+                    from-[#050507]
+                    to-transparent
+                "
+            />
 
         </section>
     );
 }
+
 
 export default Hero;
